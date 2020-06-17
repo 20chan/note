@@ -1,13 +1,29 @@
 import express from "express";
+import * as todo from "./routes/todo";
+import { DB } from "./db";
 
 const app = express();
+const PORT = process.env.PORT || 7000;
+const MONGO_ADDR = process.env.MONGO_ADDR || "localhost:27017";
 
-app.set("port", process.env.PORT || 7000);
+app.use(express.json());
 
 app.get("/api/health", (req, res) => {
     res.send("healthcheck");
 });
 
-const server = app.listen(app.get("port"), () => {
-    console.log(`server started at localhost:${app.get("port")}`);
-})
+app.use("/api", todo.routes);
+
+const server = app.listen(PORT, () => {
+    console.log(`server started at localhost:${PORT}`);
+});
+
+server.on("listening", async () => {
+    console.log(`server started at localhost:${PORT}`);
+    try {
+        await DB.connect(`mongodb://${MONGO_ADDR}`);
+        console.log("db connected");
+    } catch (err) {
+        console.error("error connecting db", err);
+    }
+});

@@ -10,23 +10,35 @@ services:
     volumes:
       - ./proxy/Caddyfile:/etc/Caddyfile
     ports:
-      - "7000:7000"
+      - 7000:7000
+  note-db:
+    container_name: note-db
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    volumes:
+      - ./mongo:/data/db
   note-server:
     build: ./server
     container_name: note-server
     ports:
-      - "7001:7001"
+      - 7001:7001
     volumes:
       - ./server/app:/app
     environment:
-      PORT: "7001"
+      PORT: 7001
+      MONGO_ADDR: "note-db:27017"
+    depends_on:
+      - note-db
+    links:
+      - note-db
   note-client:
     build: ./client
     container_name: note-client
     ports:
-      - "7002:7002"
+      - 7002:7002
     volumes:
       - ./client/app:/app
     stdin_open: true
     environment:
-      PORT: "7002"
+      PORT: 7002
