@@ -1,11 +1,32 @@
 version: "2"
 services:
-  note:
-    build: .
-    container_name: note
+  note-proxy:
+    container_name: note-proxy
+    image: abiosoft/caddy:latest
+    depends_on:
+      - note-server
+      - note-client
+    restart: always
     volumes:
-      - ./dist:/app/dist
+      - ./proxy/Caddyfile:/etc/Caddyfile
     ports:
       - "7000:7000"
+  note-server:
+    build: ./server
+    container_name: note-server
+    ports:
+      - "7001:7001"
+    volumes:
+      - ./server/app:/app
     environment:
-      PORT: "7000"
+      PORT: "7001"
+  note-client:
+    build: ./client
+    container_name: note-client
+    ports:
+      - "7002:7002"
+    volumes:
+      - ./client/app:/app
+    stdin_open: true
+    environment:
+      PORT: "7002"
