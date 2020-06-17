@@ -7,6 +7,7 @@ Built with `typescript`, `express`, `react`, `caddy`, `mongodb`, `docker`, `dock
 ## How to run
 
 ```shell
+$ mkdir mongo config
 $ docker-compose up -d
 ```
 
@@ -21,3 +22,25 @@ $ docker-compose up -d
 nginx -> caddy:7000 -> /api server:7001 -> db:27017
                     -> /    client:7002
 ```
+
+## [setup.sh](/setup.sh)
+
+```shell
+$ ./setup.sh
+Usage: ./setup.sh <subcommands> [args]
+
+SUBCOMMANDS:
+
+  user:
+    ./setup.sh user add <id> <password>
+    ./setup.sh user update <id> <password>
+    ./setup.sh user remove <id>
+    ./setup.sh user list
+
+  debug:
+    ./setup.sh debug hash <text>
+```
+
+### Requirements
+
+- [jq](https://stedolan.github.io/jq/)
