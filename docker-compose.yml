@@ -25,6 +25,7 @@ services:
       - 7001:7001
     volumes:
       - ./server/app:/app
+      - ./config:/app/config
     environment:
       PORT: 7001
       MONGO_ADDR: "note-db:27017"

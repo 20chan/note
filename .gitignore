@@ -42,4 +42,5 @@ yarn.lock
 
 
 mongo/**
+config/**
 server/app/dist/**
