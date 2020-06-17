@@ -1,0 +1,11 @@
+version: "2"
+services:
+  note:
+    build: .
+    container_name: note
+    volumes:
+      - ./dist:/app/dist
+    ports:
+      - "7000:7000"
+    environment:
+      PORT: "7000"
