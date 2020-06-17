@@ -1,0 +1,8 @@
+localhost:7000 {
+  proxy /api note-server:7001 {
+    transparent
+  }
+  proxy / note-client:7002 {
+    transparent
+  }
+}
