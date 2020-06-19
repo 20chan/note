@@ -14,7 +14,9 @@ export const NotePage = () => {
             method: "GET",
         }).then(async resp => {
             console.log("fetch");
-            setNotes(await resp.json());
+            if (resp.ok) {
+                setNotes(await resp.json());
+            }
         });
     }, []);
 
