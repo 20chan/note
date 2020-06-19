@@ -8,6 +8,7 @@ Built with `typescript`, `express`, `react`, `caddy`, `mongodb`, `docker`, `dock
 
 ```shell
 $ mkdir mongo config
+$ ./setup generate-jwt-secret
 $ docker-compose up -d
 ```
 
@@ -43,4 +44,5 @@ SUBCOMMANDS:
 
 ### Requirements
 
+- [openssl](https://www.openssl.org/)
 - [jq](https://stedolan.github.io/jq/)

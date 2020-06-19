@@ -13,6 +13,9 @@ SUBCOMMANDS:
 
   debug:
     $0 debug hash <text>
+
+  etc:
+    $0 generate-jwt-secret
 "
   exit 1
 }
@@ -100,6 +103,10 @@ _hash() {
   echo $hash
 }
 
+_generate_jwt_secret() {
+  echo AUTH_SECRET=$(openssl rand -base64 32) > $CONFIG_PATH/jwt-secret
+}
+
 case $1 in
   user)
     shift
@@ -136,6 +143,10 @@ case $1 in
         _usage
         ;;
     esac
+    ;;
+  generate-jwt-secret)
+    shift
+    _generate_jwt_secret
     ;;
   *)
     _usage
