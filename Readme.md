@@ -40,6 +40,9 @@ SUBCOMMANDS:
 
   debug:
     ./setup.sh debug hash <text>
+
+  etc:
+    ./setup.sh generate-jwt-secret
 ```
 
 ### Requirements
