@@ -1,6 +1,8 @@
 import express from "express";
+import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
 import { Auth } from "./routes/auth";
-import * as todo from "./routes/todo";
+import * as todo from "./routes/note";
 import { DB } from "./db";
 import { Account } from "./accounts";
 import { errorMiddleware } from "./middlewares/error";
@@ -13,7 +15,8 @@ const ACCOUNTS_PATH = process.env.ACCOUNTS_PATH || "accounts.json";
 const AUTH_EXPIRES = Number(process.env.AUTH_EXPIRES) || 60 * 60;
 const AUTH_SECRET = process.env.AUTH_SECRET || "super-secret-key";
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(cookieParser.default());
 
 app.get("/api/health", (req, res) => {
     res.send("healthcheck");

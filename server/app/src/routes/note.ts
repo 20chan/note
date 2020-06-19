@@ -21,7 +21,6 @@ routes.get("/note", (req, resp) => {
     const result = collection.find({}).toArray((err, items) => {
         if (err) {
             resp.status(500);
-            resp.end();
             console.error("error on todo.routes.get /note", err);
         } else {
             items = items.map(mapItem);
@@ -39,7 +38,6 @@ routes.get("/note/:id", async (req, resp) => {
         resp.json(item);
     } catch {
         resp.status(404);
-        resp.end();
     }
 });
 
@@ -52,11 +50,9 @@ routes.post("/note", (req, resp) => {
     if (!item.title || !item.content) {
         resp.status(400);
         resp.send({"error": true});
-        resp.end();
     } else {
         collection.insert(item);
         resp.send({"error": false});
-        resp.end();
     }
 });
 

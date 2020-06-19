@@ -15,11 +15,11 @@ interface TokenData {
 export class Auth {
     public router: express.Router;
     private expires: number;
-    private secret: string;
+    private secret: Buffer;
 
     constructor(expires: number, secret: string) {
         this.expires = expires;
-        this.secret = secret;
+        this.secret = Buffer.from(secret, "base64");
 
         this.router = express.Router();
         this.router.post("/login", this.login);
@@ -27,7 +27,6 @@ export class Auth {
 
     public auth = async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
         const cookies = req.cookies;
-        console.log("oh..");
         if (cookies && cookies.Authorization) {
             try {
                 const data = jwt.verify(cookies.Authorization, this.secret) as TokenData;
@@ -42,13 +41,13 @@ export class Auth {
             } catch {
                 next(new HttpError(401, "Wrong auth token"));
             }
+        } else {
+            next(new HttpError(401, "Auth token not found"));
         }
-        next(new HttpError(401, "Auth token not found"));
     }
 
     private login = async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
         const user: User = req.body;
-        console.log(`attempts: ${user.id}, ${user.password}`);
         if (user && Account.match(user.id, user.password)) {
             user.password = "";
             const token = this.createToken(user);
@@ -61,7 +60,7 @@ export class Auth {
     }
 
     private createCookie(token: Token): string {
-        return `Authorization=${token.token}; HttpOnly; Max-Age=${token.expiresIn}`;
+        return `Authorization=${token.token}; HttpOnly; Max-Age=${token.expiresIn}; Path=/;`;
     }
 
     private createToken(user: User): Token {
