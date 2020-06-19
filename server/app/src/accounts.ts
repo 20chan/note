@@ -9,7 +9,7 @@ export interface User {
 export class Account {
     public static users: User[];
 
-    public static load(path: string) : Promise<User[]> {
+    public static load(path: string): Promise<User[]> {
         return new Promise<User[]>((resolve, reject) => {
             readFile(path, "utf-8", (err, data) => {
                 if (err) {
@@ -22,11 +22,15 @@ export class Account {
         });
     }
 
-    public static match(id: string, password: string) : boolean {
+    public static match(id: string, password: string): boolean {
         const match = this.users.find(user => user.id === id);
         if (match) {
             return match.password === crypto.SHA512(password).toString();
         }
         return false;
+    }
+
+    public static find(id: string): User | undefined {
+        return this.users.find(user => user.id === id);
     }
 }

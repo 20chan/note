@@ -4,7 +4,7 @@ import MongoClient = mongo.MongoClient;
 export class DB {
     public static client: mongo.MongoClient;
 
-    public static connect(url: string) : Promise<MongoClient> {
+    public static connect(url: string): Promise<MongoClient> {
         return new Promise<MongoClient>((resolve, reject) => {
             MongoClient.connect(url, {}, (err, client) => {
                 if (err) {
