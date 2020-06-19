@@ -23,6 +23,7 @@ export class Auth {
 
         this.router = express.Router();
         this.router.post("/login", this.login);
+        this.router.get("/logout", this.logout);
     }
 
     public auth = async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
@@ -57,6 +58,11 @@ export class Auth {
             resp.status(401);
             next(new HttpError(401, "Wrong credentials provided"));
         }
+    }
+
+    private logout = async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
+        resp.setHeader("Set-Cookie", ["Authorization=; Max-age=0"]);
+        resp.status(200);
     }
 
     private createCookie(token: Token): string {
