@@ -29,6 +29,7 @@ services:
     environment:
       PORT: 7001
       MONGO_ADDR: "note-db:27017"
+      ACCOUNTS_PATH: "/app/config/accounts.json"
     depends_on:
       - note-db
     links:
