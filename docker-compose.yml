@@ -2,13 +2,13 @@ version: "2"
 services:
   note-proxy:
     container_name: note-proxy
-    image: abiosoft/caddy:latest
+    image: caddy
     depends_on:
       - note-server
       - note-client
     restart: always
     volumes:
-      - ./proxy/Caddyfile:/etc/Caddyfile
+      - ./proxy/Caddyfile:/etc/caddy/Caddyfile
     ports:
       - 7000:7000
   note-db:

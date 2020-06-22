@@ -1,11 +1,4 @@
-localhost:7000 {
-  proxy /api note-server:7001 {
-    transparent
-  }
-  proxy /sockjs-node note-client:7002 {
-    websocket
-  }
-  proxy / note-client:7002 {
-    transparent
-  }
-}
+http://localhost:7000
+
+reverse_proxy /api/* note-server:7001
+reverse_proxy note-client:7002
