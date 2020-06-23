@@ -1,4 +1,5 @@
 import * as React from "react";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 interface Note {
     id: string;
@@ -6,20 +7,30 @@ interface Note {
     content: string;
 }
 
-export const NotePage = () => {
+const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
+    const [auth, setAuth] = React.useState<boolean>(false);
     const [notes, setNotes] = React.useState<Note[]>([]);
+
     React.useEffect(() => {
-        console.log("effect");
         fetch("/api/note", {
             method: "GET",
         }).then(async resp => {
-            console.log("fetch");
             if (resp.ok) {
                 setNotes(await resp.json());
+                setAuth(true);
+            } else {
+                history.push("/login");
             }
         });
     }, []);
 
+    if (!auth) {
+        return (
+            <div>
+                <em>trying to auth...</em>
+            </div>
+        );
+    }
     return (
         <ul>
         { notes.map(n =>
@@ -28,3 +39,5 @@ export const NotePage = () => {
         </ul>
     );
 };
+
+export default withRouter(NotePage);
