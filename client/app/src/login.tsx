@@ -1,44 +1,33 @@
 import * as React from "react";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
-interface IProps {
-}
+const LoginPage: React.SFC<RouteComponentProps> = ({ history }) => {
+    const [id, setId] = React.useState<string>("");
+    const [password, setPassword] = React.useState<string>("");
 
-interface IState {
-    id: string;
-    password: string;
-}
-
-export class LoginPage extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            id: "",
-            password: "",
-        };
-    }
-
-    handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const resp = await fetch("/api/auth/login", {
             method: "POST",
-            body: JSON.stringify(this.state),
+            body: JSON.stringify({ id, password }),
             headers: {
                 "Content-Type": "application/json",
             }
         });
         if (resp.ok) {
-
+            history.push("/");
+        } else {
+            setPassword("");
         }
-    }
+    };
 
-    render = () => {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <input type="text" placeholder="type id" value={this.state.id} onChange={event => this.setState({ id: event.target.value })} required />
-                <input type="password" placeholder="type password" value={this.state.password} onChange={event => this.setState({ password: event.target.value })} required />
-                <button>Submit</button>
-            </form>
-        )
-    }
-}
+    return (
+        <form onSubmit={handleSubmit}>
+            <input type="text" placeholder="type id" value={id} onChange={event => setId(event.target.value)} required />
+            <input type="password" placeholder="type password" value={password} onChange={event => setPassword(event.target.value)} required />
+            <button>Submit</button>
+        </form>
+    );
+};
+
+export default withRouter(LoginPage);
