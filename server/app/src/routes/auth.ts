@@ -63,6 +63,7 @@ export class Auth {
     private logout = async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
         resp.setHeader("Set-Cookie", ["Authorization=; Max-age=0"]);
         resp.status(200);
+        resp.end();
     }
 
     private createCookie(token: Token): string {
