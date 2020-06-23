@@ -24,6 +24,16 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
         });
     }, []);
 
+    const logout = async (e: React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const resp = await fetch("/api/auth/logout", {
+            method: "GET",
+        });
+        if (resp.ok) {
+            history.push("/login");
+        }
+    };
+
     if (!auth) {
         return (
             <div>
@@ -32,11 +42,13 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
         );
     }
     return (
-        <ul>
-        { notes.map(n =>
-            <li key={n.id}>{n.title}</li>)
-        }
-        </ul>
+        <div>
+            <button onClick={logout}>logout</button>
+            <ul> { notes.map(n =>
+                <li key={n.id}>{n.title}</li>)
+            }
+            </ul>
+        </div>
     );
 };
 
