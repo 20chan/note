@@ -1,11 +1,9 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-
-interface Note {
-    id: string;
-    title: string;
-    content: string;
-}
+import { Note } from "./note";
+import { NoteCard } from "./components/noteCard";
+import { NewNoteCard } from "./components/newNoteCard";
+import "./notes.css";
 
 const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
     const [auth, setAuth] = React.useState<boolean>(false);
@@ -34,6 +32,16 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
         }
     };
 
+    const submitNewNote = (title: string, content: string) => {
+        fetch("/api/note", {
+            method: "POST",
+            body: JSON.stringify({ title, content }),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+    };
+
     if (!auth) {
         return (
             <div>
@@ -44,10 +52,14 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
     return (
         <div>
             <button onClick={logout}>logout</button>
-            <ul> { notes.map(n =>
-                <li key={n.id}>{n.title}</li>)
-            }
-            </ul>
+            <div className="newNoteArea">
+                <NewNoteCard onCreate={submitNewNote}/>
+            </div>
+            <div className="notes">
+            { notes.map(n =>
+                <NoteCard note={n} />
+            )}
+            </div>
         </div>
     );
 };

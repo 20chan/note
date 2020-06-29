@@ -1,0 +1,10 @@
+.newNoteArea {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.newCardTextarea {
+    width: 100%;
+    resize: none;
+}
