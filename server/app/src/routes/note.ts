@@ -17,8 +17,9 @@ const mapItem = (item: any) => {
 };
 
 routes.get("/note", (req, resp) => {
+    const user = req.user.id;
     const collection = getCollection();
-    const result = collection.find({}).toArray((err, items) => {
+    const result = collection.find({"author": user}).toArray((err, items) => {
         if (err) {
             resp.status(500);
             console.error("error on todo.routes.get /note", err);
@@ -31,9 +32,10 @@ routes.get("/note", (req, resp) => {
 
 routes.get("/note/:id", async (req, resp) => {
     const id = req.params.id;
+    const user = req.user.id;
     const collection = getCollection();
     try {
-        const result = await collection.findOne({"_id": new mongo.ObjectID(id)});
+        const result = await collection.findOne({"_id": new mongo.ObjectID(id), "author": user});
         const item = mapItem(result);
         resp.json(item);
     } catch {
@@ -44,6 +46,7 @@ routes.get("/note/:id", async (req, resp) => {
 routes.post("/note", (req, resp) => {
     const collection = getCollection();
     const item = {
+        user: req.user.id,
         title: req.body.title,
         content: req.body.content,
     };
