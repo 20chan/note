@@ -43,7 +43,7 @@ routes.get("/note/:id", async (req, resp) => {
     }
 });
 
-routes.post("/note", (req, resp) => {
+routes.post("/note", async (req, resp) => {
     const collection = getCollection();
     const item = {
         user: req.user.id,
@@ -54,8 +54,26 @@ routes.post("/note", (req, resp) => {
         resp.status(400);
         resp.send({"error": true});
     } else {
-        collection.insert(item);
+        await collection.insert(item);
         resp.send({"error": false});
+    }
+});
+
+routes.put("/note/:id", async (req, resp) => {
+    const id = req.params.id;
+    const user = req.user.id;
+    const collection = getCollection();
+    const item = {
+        user: req.user.id,
+        title: req.body.title,
+        content: req.body.content,
+    };
+    try {
+        await collection.updateOne({"_id": new mongo.ObjectID(id), "author": user}, item);
+        resp.send({"error": false});
+    } catch {
+        resp.status(404);
+        resp.send({"error": true});
     }
 });
 
