@@ -8,3 +8,13 @@
     width: 100%;
     resize: none;
 }
+
+.notes {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+}
+
+.card-header, .card-content {
+    white-space: pre-line;
+}

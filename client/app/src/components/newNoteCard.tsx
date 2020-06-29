@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-autosize-textarea';
 import { Note } from "../note";
 
 interface Props {
-    onCreate: (titel: string, content: string) => void;
+    onCreate: (titel: string, content: string, clear: () => void) => void;
 }
 
 export const NewNoteCard = (props: Props) => {
@@ -22,6 +22,11 @@ export const NewNoteCard = (props: Props) => {
         });
     }, []);
 
+    const clear = () => {
+        setTitle("");
+        setContent("");
+    };
+
     return (
         <div className="newNoteCard">
             <div className="newNoteHeader">
@@ -29,7 +34,7 @@ export const NewNoteCard = (props: Props) => {
             </div>
             <div className="newNoteBody">
                 <TextareaAutosize className="newCardTextarea" ref={contentText} rows={3} value={content} onChange={e => setContent(e.currentTarget.value)} placeholder="content..." />
-                <button onClick={ev => props.onCreate(title, content)}>Upload</button>
+                <button onClick={ev => props.onCreate(title, content, clear)}>Upload</button>
             </div>
         </div>
     );

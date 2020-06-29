@@ -9,7 +9,7 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
     const [auth, setAuth] = React.useState<boolean>(false);
     const [notes, setNotes] = React.useState<Note[]>([]);
 
-    React.useEffect(() => {
+    const fetchNotes = () => {
         fetch("/api/note", {
             method: "GET",
         }).then(async resp => {
@@ -20,6 +20,10 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
                 history.push("/login");
             }
         });
+    };
+
+    React.useEffect(() => {
+        fetchNotes();
     }, []);
 
     const logout = async (e: React.FormEvent<HTMLButtonElement>) => {
@@ -32,13 +36,16 @@ const NotePage: React.SFC<RouteComponentProps> = ({ history }) => {
         }
     };
 
-    const submitNewNote = (title: string, content: string) => {
+    const submitNewNote = (title: string, content: string, clear: () => void) => {
         fetch("/api/note", {
             method: "POST",
             body: JSON.stringify({ title, content }),
             headers: {
                 "Content-Type": "application/json",
             }
+        }).then(() => {
+            fetchNotes();
+            clear();
         });
     };
 
