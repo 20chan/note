@@ -46,7 +46,7 @@ routes.get("/note/:id", async (req, resp) => {
 routes.post("/note", async (req, resp) => {
     const collection = getCollection();
     const item = {
-        user: req.user.id,
+        author: req.user.id,
         title: req.body.title,
         content: req.body.content,
     };
